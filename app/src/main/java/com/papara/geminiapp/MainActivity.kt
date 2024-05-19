@@ -12,26 +12,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.papara.geminiapp.presentation.chat_screen.ChatScreen
+import com.papara.geminiapp.presentation.chat_screen.ChatScreenViewModel
 import com.papara.geminiapp.ui.theme.GeminiAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: ChatScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GeminiAppTheme {
-                LaunchedEffect(Unit) {
-                    viewModel.sendMessage()
-                }
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    ChatScreen(viewModel = viewModel)
                 }
             }
         }
