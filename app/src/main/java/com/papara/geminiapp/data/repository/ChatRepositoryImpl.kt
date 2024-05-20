@@ -16,12 +16,18 @@ class ChatRepositoryImpl @Inject constructor(
     private val chatMessageDao: ChatMessageDao,
     private val conversationDao: ConversationDao,
 ) : ChatRepository {
-    override suspend fun getMessagesByConversationId(conversationId: Int): List<ChatMessage> {
-        return conversationDao.getMessagesByConversationId(conversationId)
+    override suspend fun getMessagesByConversationId(conversationId: Long?): List<ChatMessage> {
+        return conversationDao.getMessagesByConversationId()
     }
+
+
 
     override suspend fun insertChatMessage(chatMessage: ChatMessage) {
         chatMessageDao.insertChatMessage(chatMessage)
+    }
+
+    override suspend fun createConversation(conversation: Conversation): Long {
+        return conversationDao.createConversation(conversation)
     }
 
     override suspend fun getAllConversations(): List<Conversation> {

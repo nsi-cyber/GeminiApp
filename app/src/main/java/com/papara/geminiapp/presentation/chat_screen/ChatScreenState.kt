@@ -1,11 +1,11 @@
 package com.papara.geminiapp.presentation.chat_screen
 
-data class Chat(
-    val prompt: String,
-    val isFromUser: Boolean
-)
+import com.papara.geminiapp.data.local.entity.ChatMessage
+
+
 data class ChatScreenState(
-    val chatList: MutableList<Chat> = mutableListOf(),
-    val prompt: String = ""
+    val chatList: MutableList<ChatMessage> = mutableListOf(),
+    val prompt: String = "",
+    val isLoading:Boolean=false
 )
 

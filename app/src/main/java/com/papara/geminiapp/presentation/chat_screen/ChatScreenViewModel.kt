@@ -1,5 +1,11 @@
 package com.papara.geminiapp.presentation.chat_screen
 
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.papara.geminiapp.common.Resource
@@ -8,6 +14,8 @@ import com.papara.geminiapp.data.remote.model.request.Content
 import com.papara.geminiapp.data.remote.model.request.MessageRequestBody
 import com.papara.geminiapp.data.remote.model.request.Part
 import com.papara.geminiapp.domain.useCase.chat.SendMessageUseCase
+import com.papara.geminiapp.domain.useCase.database.CreateConversationUseCase
+import com.papara.geminiapp.domain.useCase.database.GetMessagesUseCase
 import com.papara.geminiapp.domain.useCase.database.SavePromptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,36 +29,76 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatScreenViewModel @Inject constructor(
     private val sendMessageUseCase: SendMessageUseCase,
-    private val savePromptUseCase: SavePromptUseCase
+    private val savePromptUseCase: SavePromptUseCase,
+    private val createConversationUseCase: CreateConversationUseCase,
+    private val getMessagesUseCase: GetMessagesUseCase
 ) : ViewModel() {
+
 
     private val _chatScreenState = MutableStateFlow(ChatScreenState())
     val chatScreenState = _chatScreenState.asStateFlow()
-init{
 
-}
+    private var _conversationId = mutableLongStateOf(-1L)
+    val conversationId = _conversationId.longValue
+
+
     fun onEvent(event: ChatScreenEvent) {
         when (event) {
             is ChatScreenEvent.SendPrompt -> {
                 if (event.prompt.isNotEmpty()) {
-                    addPrompt(event.prompt, isUser = true)
+                    if (_conversationId.longValue != -1L) {
+                        addPrompt(event.prompt, isUser = true)
+                    } else {
+                        createConversation(event.prompt)
+                    }
                     getResponse(event.prompt)
                 }
             }
+
             is ChatScreenEvent.UpdatePrompt -> {
                 _chatScreenState.update {
                     it.copy(prompt = event.newPrompt)
                 }
             }
+
+
+            is ChatScreenEvent.LoadConversation -> {
+                getConversationMessages(event.conversationId)
+            }
+
         }
     }
-        private fun addPrompt(prompt: String?,isUser:Boolean) {
-        saveToDatabase( ChatMessage(conversationId = 1,message = prompt!!, isFromUser = isUser))
+
+    private fun getConversationMessages(conversationId: Long) {
+        viewModelScope.launch {
+            getMessagesUseCase(conversationId = conversationId).onEach { messageList ->
+                _chatScreenState.update {
+                    it.copy(chatList = messageList.toMutableList())
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private fun addPrompt(prompt: String?, isUser: Boolean) {
+
+        saveToDatabase(
+            ChatMessage(
+                conversationId = _conversationId.longValue,
+                message = prompt!!,
+                isFromUser = isUser
+            )
+        )
 
         _chatScreenState.update {
-            it.copy(
+            it.copy(isLoading = false,
                 chatList = it.chatList.toMutableList().apply {
-                    add(Chat(prompt.orEmpty(), isUser))
+                    add(
+                        ChatMessage(
+                            conversationId = _conversationId.longValue,
+                            message = prompt,
+                            isFromUser = isUser
+                        )
+                    )
                 },
                 prompt = ""
             )
@@ -69,29 +117,45 @@ init{
                         )
                     )
                 )
-            ).onEach {message ->
+            ).onEach { message ->
                 when (message) {
 
 
                     is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        _chatScreenState.update {
+                            it.copy(
+                              isLoading = true
+                            )
+                        }
+                    }
                     is Resource.Empty -> {}
-                    is Resource.Success ->{
-                            addPrompt(prompt=message.data?.candidates?.first()?.content?.parts?.first()?.text, isUser = false)
+                    is Resource.Success -> {
+                        addPrompt(
+                            prompt = message.data?.candidates?.first()?.content?.parts?.first()?.text,
+                            isUser = false
+                        )
                     }
                 }
             }.launchIn(this)
         }
     }
 
-
     private fun saveToDatabase(prompt: ChatMessage) {
         viewModelScope.launch {
-            savePromptUseCase(prompt).onEach {message ->
-
-            }.launchIn(this)
+            savePromptUseCase(prompt).launchIn(this)
         }
     }
+
+    private fun createConversation(prompt: String) {
+        viewModelScope.launch {
+            createConversationUseCase(prompt).onEach { conversationId ->
+                _conversationId.longValue = conversationId
+            }.launchIn(this)
+            addPrompt(prompt, isUser = true)
+        }
+    }
+
 
 
 }

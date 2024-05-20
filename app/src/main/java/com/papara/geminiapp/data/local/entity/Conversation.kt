@@ -9,7 +9,7 @@ import com.papara.geminiapp.data.models.ConversationModel
 
 @Entity(tableName = "conversations")
 data class Conversation(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val description: String,
 
 )

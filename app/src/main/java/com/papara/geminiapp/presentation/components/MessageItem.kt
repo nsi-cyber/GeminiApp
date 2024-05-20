@@ -9,13 +9,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.papara.geminiapp.presentation.chat_screen.Chat
+import com.papara.geminiapp.data.local.entity.ChatMessage
 
 @Composable
 fun MessageItem(
-    message: Chat
+    message: ChatMessage
 ) {
     Row(
         modifier = Modifier
@@ -28,11 +27,14 @@ fun MessageItem(
             //contentColor = MaterialTheme.colorScheme.onSecondary,
             modifier = Modifier.padding(8.dp)
         ) {
+            if(message.isFromUser)
             Text(
-                text = message.prompt,
+                text = message.message,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(8.dp)
             )
+            else
+                TypeWriterText(text = message.message)
         }
     }
 }

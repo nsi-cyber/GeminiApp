@@ -16,6 +16,7 @@ import com.papara.geminiapp.presentation.chat_screen.ChatScreen
 import com.papara.geminiapp.presentation.chat_screen.ChatScreenViewModel
 import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreen
 import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreenViewModel
+import com.papara.geminiapp.presentation.navigation.NavigationGraph
 import com.papara.geminiapp.ui.theme.GeminiAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,15 +29,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GeminiAppTheme {
+                NavigationGraph()
 
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    ConversationListScreen(viewModel = databaseViewModel)
+
+                  //  ConversationListScreen(viewModel = databaseViewModel)
                     //ChatScreen(viewModel = chatViewModel)
-                }
+
             }
         }
     }

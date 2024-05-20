@@ -19,10 +19,10 @@ import javax.inject.Inject
 class GetMessagesUseCase @Inject constructor(
     private val repo: ChatRepository
 ) {
-    operator fun invoke(conversationId:Int?): Flow<List<ChatMessage>> =
+    operator fun invoke(conversationId:Long?): Flow<List<ChatMessage>> =
         flow {
             try {
-              emit(repo.getMessagesByConversationId(conversationId!!))
+              emit(repo.getMessagesByConversationId(conversationId))
             }
             catch (e: Exception){
                 Log.e("GetMessagesUseCase Error: ",e.toString())
