@@ -1,0 +1,382 @@
+Index: app/src/main/java/com/papara/geminiapp/presentation/components/ChatInput.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp.presentation.components\r\n\r\n\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.IconButton\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.material3.TextField\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport com.papara.geminiapp.R\r\n@Composable\r\nfun ChatInput(\r\n    modifier: Modifier = Modifier,\r\n    onSendMessage: (String) -> Unit\r\n) {\r\n    var message by remember { mutableStateOf(\"\") }\r\n\r\n    Row(\r\n        modifier = modifier.fillMaxWidth(),\r\n        verticalAlignment = Alignment.CenterVertically\r\n    ) {\r\n        TextField(\r\n            value = message,\r\n            onValueChange = { message = it },\r\n            modifier = Modifier.weight(1f),\r\n            placeholder = { Text(\"Enter your message...\") }\r\n        )\r\n\r\n        IconButton(\r\n            onClick = {\r\n                onSendMessage(message)\r\n                message = \"\"\r\n            }\r\n        ) {\r\n            Icon(\r\n                painter = painterResource(id = R.drawable.ic_launcher_background),\r\n                contentDescription = \"Send\"\r\n            )\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/presentation/components/ChatInput.kt b/app/src/main/java/com/papara/geminiapp/presentation/components/ChatInput.kt
+--- a/app/src/main/java/com/papara/geminiapp/presentation/components/ChatInput.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/presentation/components/ChatInput.kt	(date 1716154327867)
+@@ -1,6 +1,7 @@
+ package com.papara.geminiapp.presentation.components
+ 
+ 
++import android.util.Log
+ import androidx.compose.foundation.layout.Row
+ import androidx.compose.foundation.layout.fillMaxWidth
+ import androidx.compose.material3.Icon
+@@ -35,10 +36,16 @@
+             placeholder = { Text("Enter your message...") }
+         )
+ 
++
+         IconButton(
+             onClick = {
+-                onSendMessage(message)
+-                message = ""
++                try {
++                    onSendMessage(message)
++                    message = ""
++                } catch (e: Exception) {
++                    // Log the error
++                    Log.e("ChatInput", "Error sending message: ", e)
++                }
+             }
+         ) {
+             Icon(
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.androidApplication)\r\n    alias(libs.plugins.jetbrainsKotlinAndroid)\r\n    id(\"kotlin-kapt\")\r\n    alias(libs.plugins.daggerHilt)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.papara.geminiapp\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.papara.geminiapp\"\r\n        minSdk = 28\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n        vectorDrawables {\r\n            useSupportLibrary = true\r\n        }\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        compose = true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion = \"1.5.1\"\r\n    }\r\n    packaging {\r\n        resources {\r\n            excludes += \"/META-INF/{AL2.0,LGPL2.1}\"\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.ui)\r\n    implementation(libs.androidx.ui.graphics)\r\n    implementation(libs.androidx.ui.tooling.preview)\r\n    implementation(libs.androidx.material3)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.ui.test.junit4)\r\n    debugImplementation(libs.androidx.ui.tooling)\r\n    debugImplementation(libs.androidx.ui.test.manifest)\r\n\r\n    //Dependency Injection\r\n    implementation(libs.dagger.hilt)\r\n    kapt(libs.dagger.hilt.compiler)\r\n\r\n    //Network\r\n    implementation(libs.retrofit2.retrofit)\r\n    implementation(libs.retrofit2.gson)\r\n    implementation(libs.okhttp3.okhttp)\r\n    implementation(libs.okhttp3.logging)\r\n}\r\n\r\nkapt {\r\n    correctErrorTypes = true\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/build.gradle.kts	(date 1716154327887)
+@@ -61,6 +61,7 @@
+     implementation(libs.androidx.ui.graphics)
+     implementation(libs.androidx.ui.tooling.preview)
+     implementation(libs.androidx.material3)
++    implementation(libs.androidx.navigation.compose)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.androidx.junit)
+     androidTestImplementation(libs.androidx.espresso.core)
+@@ -78,6 +79,12 @@
+     implementation(libs.retrofit2.gson)
+     implementation(libs.okhttp3.okhttp)
+     implementation(libs.okhttp3.logging)
++
++    //Room Database
++    implementation("androidx.room:room-runtime:2.6.1")
++    kapt("androidx.room:room-compiler:2.6.1")
++    implementation("androidx.room:room-ktx:2.6.1")
++
+ }
+ 
+ kapt {
+Index: app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp.presentation.chat_screen\r\n\r\nimport androidx.lifecycle.ViewModel\r\nimport androidx.lifecycle.viewModelScope\r\nimport com.papara.geminiapp.common.Resource\r\nimport com.papara.geminiapp.data.remote.model.request.Content\r\nimport com.papara.geminiapp.data.remote.model.request.MessageRequestBody\r\nimport com.papara.geminiapp.data.remote.model.request.Part\r\nimport com.papara.geminiapp.domain.useCase.chat.SendMessageUseCase\r\nimport dagger.hilt.android.lifecycle.HiltViewModel\r\nimport kotlinx.coroutines.flow.MutableStateFlow\r\nimport kotlinx.coroutines.flow.asStateFlow\r\nimport kotlinx.coroutines.flow.launchIn\r\nimport kotlinx.coroutines.flow.onEach\r\nimport kotlinx.coroutines.flow.update\r\nimport kotlinx.coroutines.launch\r\nimport javax.inject.Inject\r\n\r\n@HiltViewModel\r\nclass ChatScreenViewModel @Inject constructor(\r\n    private val sendMessageUseCase: SendMessageUseCase\r\n) : ViewModel() {\r\n\r\n    private val _chatScreenState = MutableStateFlow(ChatScreenState())\r\n    val chatScreenState = _chatScreenState.asStateFlow()\r\n\r\n    fun onEvent(event: ChatScreenEvent) {\r\n        when (event) {\r\n            is ChatScreenEvent.SendPrompt -> {\r\n                if (event.prompt.isNotEmpty()) {\r\n                    addPrompt(event.prompt, isUser = true)\r\n                    getResponse(event.prompt)\r\n                }\r\n            }\r\n            is ChatScreenEvent.UpdatePrompt -> {\r\n                _chatScreenState.update {\r\n                    it.copy(prompt = event.newPrompt)\r\n                }\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun addPrompt(prompt: String?,isUser:Boolean) {\r\n        _chatScreenState.update {\r\n            it.copy(\r\n                chatList = it.chatList.toMutableList().apply {\r\n                    add(Chat(prompt.orEmpty(), isUser))\r\n                },\r\n                prompt = \"\"\r\n            )\r\n        }\r\n    }\r\n\r\n    private fun getResponse(prompt: String) {\r\n        viewModelScope.launch {\r\n            sendMessageUseCase(\r\n                apiKey = \"AIzaSyCDOf1x4xf_0-_kT4np8Oyj-o1m0cGDUmA\", body = MessageRequestBody(\r\n                    contents = listOf(\r\n                        Content(\r\n                            parts = listOf(\r\n                                Part(prompt)\r\n                            )\r\n                        )\r\n                    )\r\n                )\r\n            ).onEach {message ->\r\n                when (message) {\r\n\r\n\r\n                    is Resource.Error -> {}\r\n                    is Resource.Loading -> {}\r\n                    is Resource.Empty -> {}\r\n                    is Resource.Success ->{\r\n                            addPrompt(prompt=message.data?.candidates?.first()?.content?.parts?.first()?.text, isUser = false)\r\n                    }\r\n                }\r\n            }.launchIn(this)\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenViewModel.kt b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenViewModel.kt
+--- a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenViewModel.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenViewModel.kt	(date 1716154327894)
+@@ -3,9 +3,11 @@
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.viewModelScope
+ import com.papara.geminiapp.common.Resource
++import com.papara.geminiapp.data.local.entity.ChatMessage
+ import com.papara.geminiapp.data.remote.model.request.Content
+ import com.papara.geminiapp.data.remote.model.request.MessageRequestBody
+ import com.papara.geminiapp.data.remote.model.request.Part
++import com.papara.geminiapp.data.repository.ChatRepository
+ import com.papara.geminiapp.domain.useCase.chat.SendMessageUseCase
+ import dagger.hilt.android.lifecycle.HiltViewModel
+ import kotlinx.coroutines.flow.MutableStateFlow
+@@ -18,7 +20,8 @@
+ 
+ @HiltViewModel
+ class ChatScreenViewModel @Inject constructor(
+-    private val sendMessageUseCase: SendMessageUseCase
++    private val sendMessageUseCase: SendMessageUseCase,
++    private val chatRepository: ChatRepository
+ ) : ViewModel() {
+ 
+     private val _chatScreenState = MutableStateFlow(ChatScreenState())
+@@ -28,8 +31,10 @@
+         when (event) {
+             is ChatScreenEvent.SendPrompt -> {
+                 if (event.prompt.isNotEmpty()) {
+-                    addPrompt(event.prompt, isUser = true)
+-                    getResponse(event.prompt)
++                    viewModelScope.launch {
++                        addPrompt(event.prompt, isUser = true)
++                        getResponse(event.prompt)
++                    }
+                 }
+             }
+             is ChatScreenEvent.UpdatePrompt -> {
+@@ -40,14 +45,15 @@
+         }
+     }
+ 
+-    private fun addPrompt(prompt: String?,isUser:Boolean) {
+-        _chatScreenState.update {
+-            it.copy(
+-                chatList = it.chatList.toMutableList().apply {
+-                    add(Chat(prompt.orEmpty(), isUser))
+-                },
+-                prompt = ""
+-            )
++    private fun addPrompt(prompt: String?, isUser: Boolean) {
++        viewModelScope.launch {
++            chatRepository.insertChatMessage(ChatMessage(message = prompt.orEmpty(), isFromUser = isUser))
++            _chatScreenState.update {
++                it.copy(
++                    chatList = chatRepository.getAllChatMessages(),
++                    prompt = ""
++                )
++            }
+         }
+     }
+ 
+Index: app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenState.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp.presentation.chat_screen\r\n\r\ndata class Chat(\r\n    val prompt: String,\r\n    val isFromUser: Boolean\r\n)\r\ndata class ChatScreenState(\r\n    val chatList: MutableList<Chat> = mutableListOf(),\r\n    val prompt: String = \"\"\r\n)\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenState.kt b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenState.kt
+--- a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenState.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreenState.kt	(date 1716154327906)
+@@ -1,11 +1,13 @@
+ package com.papara.geminiapp.presentation.chat_screen
+ 
++import com.papara.geminiapp.data.local.entity.ChatMessage
++
+ data class Chat(
+     val prompt: String,
+     val isFromUser: Boolean
+ )
+ data class ChatScreenState(
+-    val chatList: MutableList<Chat> = mutableListOf(),
++    val chatList: List<ChatMessage> = mutableListOf(),
+     val prompt: String = ""
+ )
+ 
+Index: app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp.presentation.chat_screen\r\n\r\nimport androidx.activity.viewModels\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.PaddingValues\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.lazy.LazyColumn\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.collectAsState\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.unit.dp\r\nimport com.papara.geminiapp.presentation.components.ChatInput\r\nimport com.papara.geminiapp.presentation.components.MessageItem\r\n\r\n\r\n@Composable\r\nfun ChatScreen(\r\n    viewModel: ChatScreenViewModel\r\n) {\r\n\r\n    val messages by viewModel.chatScreenState.collectAsState(\r\n        initial = ChatScreenState(\r\n            chatList = mutableListOf<Chat>(),\r\n            prompt = \"\"\r\n        )\r\n    )\r\n\r\n    Column(\r\n        modifier = Modifier.fillMaxSize(),\r\n        verticalArrangement = Arrangement.SpaceBetween\r\n    ) {\r\n        LazyColumn(\r\n            modifier = Modifier.weight(1f),\r\n            contentPadding = PaddingValues(16.dp)\r\n        ) {\r\n            items(messages.chatList.size) { message ->\r\n                MessageItem(messages.chatList.get(message))\r\n            }\r\n        }\r\n\r\n        ChatInput(\r\n            modifier = Modifier.padding(16.dp),\r\n            onSendMessage = { prompt -> viewModel.onEvent(ChatScreenEvent.SendPrompt(prompt = prompt)) }\r\n        )\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreen.kt b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreen.kt
+--- a/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreen.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/presentation/chat_screen/ChatScreen.kt	(date 1716154327911)
+@@ -1,49 +1,95 @@
++@file:OptIn(ExperimentalMaterial3Api::class)
++
+ package com.papara.geminiapp.presentation.chat_screen
+ 
+-import androidx.activity.viewModels
+ import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Column
+ import androidx.compose.foundation.layout.PaddingValues
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.foundation.layout.padding
+ import androidx.compose.foundation.lazy.LazyColumn
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.ArrowBack
++import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.Icon
++import androidx.compose.material3.IconButton
++import androidx.compose.material3.Scaffold
++import androidx.compose.material3.SnackbarHost
++import androidx.compose.material3.SnackbarHostState
++import androidx.compose.material3.Text
++import androidx.compose.material3.TopAppBar
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.collectAsState
+ import androidx.compose.runtime.getValue
++import androidx.compose.runtime.remember
++import androidx.compose.runtime.rememberCoroutineScope
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.unit.dp
++import androidx.navigation.compose.rememberNavController
+ import com.papara.geminiapp.presentation.components.ChatInput
++import com.papara.geminiapp.presentation.components.DrawerContent
+ import com.papara.geminiapp.presentation.components.MessageItem
++import kotlinx.coroutines.launch
+ 
+ 
++@OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+ fun ChatScreen(
+-    viewModel: ChatScreenViewModel
++    viewModel: ChatScreenViewModel,
++    navigateToHistory: () -> Unit
+ ) {
++    val navController = rememberNavController()
++    val snackbarHostState = remember { SnackbarHostState() }
++    val scope = rememberCoroutineScope()
+ 
+-    val messages by viewModel.chatScreenState.collectAsState(
+-        initial = ChatScreenState(
+-            chatList = mutableListOf<Chat>(),
+-            prompt = ""
+-        )
+-    )
++    Scaffold(
++        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
++        topBar = {
++            TopAppBar(
++                title = { Text(text = "Chat Screen") },
++                navigationIcon = {
++                    IconButton(onClick = { navigateToHistory() }) {
++                        Icon(
++                            imageVector = Icons.Default.ArrowBack,
++                            contentDescription = "Go Back"
++                        )
++                    }
++                }
++            )
++        }
++    ) { contentPadding ->
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .padding(contentPadding),
++            verticalArrangement = Arrangement.SpaceBetween
++        ) {
++            val messages by viewModel.chatScreenState.collectAsState(
++                initial = ChatScreenState(
++                    chatList = mutableListOf(),
++                    prompt = ""
++                )
++            )
+ 
+-    Column(
+-        modifier = Modifier.fillMaxSize(),
+-        verticalArrangement = Arrangement.SpaceBetween
+-    ) {
+-        LazyColumn(
+-            modifier = Modifier.weight(1f),
+-            contentPadding = PaddingValues(16.dp)
+-        ) {
+-            items(messages.chatList.size) { message ->
+-                MessageItem(messages.chatList.get(message))
+-            }
+-        }
++            LazyColumn(
++                modifier = Modifier.weight(1f),
++                contentPadding = PaddingValues(16.dp)
++            ) {
++                items(messages.chatList.size) { message ->
++                    MessageItem(messages.chatList[message])
++                }
++            }
+ 
+-        ChatInput(
+-            modifier = Modifier.padding(16.dp),
+-            onSendMessage = { prompt -> viewModel.onEvent(ChatScreenEvent.SendPrompt(prompt = prompt)) }
++            ChatInput(
++                modifier = Modifier.padding(16.dp),
++                onSendMessage = { prompt ->
++                    viewModel.onEvent(ChatScreenEvent.SendPrompt(prompt = prompt))
++                }
++            )
++        }
++
++        DrawerContent(
++            navigateToChat = { navController.navigate("history") }
+         )
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/papara/geminiapp/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.activity.viewModels\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.LaunchedEffect\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport com.papara.geminiapp.presentation.chat_screen.ChatScreen\r\nimport com.papara.geminiapp.presentation.chat_screen.ChatScreenViewModel\r\nimport com.papara.geminiapp.ui.theme.GeminiAppTheme\r\nimport dagger.hilt.android.AndroidEntryPoint\r\n\r\n@AndroidEntryPoint\r\nclass MainActivity : ComponentActivity() {\r\n    private val viewModel: ChatScreenViewModel by viewModels()\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContent {\r\n            GeminiAppTheme {\r\n\r\n                // A surface container using the 'background' color from the theme\r\n                Surface(\r\n                    modifier = Modifier.fillMaxSize(),\r\n                    color = MaterialTheme.colorScheme.background\r\n                ) {\r\n                    ChatScreen(viewModel = viewModel)\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun Greeting(name: String, modifier: Modifier = Modifier) {\r\n    Text(\r\n        text = \"Hello $name!\",\r\n        modifier = modifier\r\n    )\r\n}\r\n\r\n@Preview(showBackground = true)\r\n@Composable\r\nfun GreetingPreview() {\r\n    GeminiAppTheme {\r\n        Greeting(\"Android\")\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/MainActivity.kt b/app/src/main/java/com/papara/geminiapp/MainActivity.kt
+--- a/app/src/main/java/com/papara/geminiapp/MainActivity.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/MainActivity.kt	(date 1716154327923)
+@@ -12,11 +12,16 @@
+ import androidx.compose.runtime.LaunchedEffect
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.tooling.preview.Preview
++import androidx.navigation.compose.NavHost
++import androidx.navigation.compose.composable
++import androidx.navigation.compose.rememberNavController
+ import com.papara.geminiapp.presentation.chat_screen.ChatScreen
+ import com.papara.geminiapp.presentation.chat_screen.ChatScreenViewModel
++import com.papara.geminiapp.presentation.history_screen.HistoryScreen
+ import com.papara.geminiapp.ui.theme.GeminiAppTheme
+ import dagger.hilt.android.AndroidEntryPoint
+ 
++// com.papara.geminiapp.MainActivity
+ @AndroidEntryPoint
+ class MainActivity : ComponentActivity() {
+     private val viewModel: ChatScreenViewModel by viewModels()
+@@ -25,13 +30,20 @@
+         super.onCreate(savedInstanceState)
+         setContent {
+             GeminiAppTheme {
+-
+-                // A surface container using the 'background' color from the theme
+-                Surface(
+-                    modifier = Modifier.fillMaxSize(),
+-                    color = MaterialTheme.colorScheme.background
+-                ) {
+-                    ChatScreen(viewModel = viewModel)
++                val navController = rememberNavController()
++                NavHost(navController = navController, startDestination = "chat") {
++                    composable("chat") {
++                        ChatScreen(
++                            viewModel = viewModel,
++                            navigateToHistory = { navController.navigate("history") }
++                        )
++                    }
++                    composable("history") {
++                        HistoryScreen(
++                            viewModel = viewModel,
++                            navigateBack = { navController.popBackStack() }
++                        )
++                    }
+                 }
+             }
+         }
+Index: app/src/main/java/com/papara/geminiapp/presentation/components/MessageItem.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.papara.geminiapp.presentation.components\r\n\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.material3.Card\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.tooling.preview.Preview\r\nimport androidx.compose.ui.unit.dp\r\nimport com.papara.geminiapp.presentation.chat_screen.Chat\r\n\r\n@Composable\r\nfun MessageItem(\r\n    message: Chat\r\n) {\r\n    Row(\r\n        modifier = Modifier\r\n            .fillMaxWidth()\r\n            .padding(8.dp),\r\n        horizontalArrangement = if (message.isFromUser == false) Arrangement.Start else Arrangement.End\r\n    ) {\r\n        Card(\r\n            //backgroundColor = if (message.sender == \"Bot\") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,\r\n            //contentColor = MaterialTheme.colorScheme.onSecondary,\r\n            modifier = Modifier.padding(8.dp)\r\n        ) {\r\n            Text(\r\n                text = message.prompt,\r\n                style = MaterialTheme.typography.bodyMedium,\r\n                modifier = Modifier.padding(8.dp)\r\n            )\r\n        }\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/papara/geminiapp/presentation/components/MessageItem.kt b/app/src/main/java/com/papara/geminiapp/presentation/components/MessageItem.kt
+--- a/app/src/main/java/com/papara/geminiapp/presentation/components/MessageItem.kt	(revision 08a80c33ec91cda5b189fb13217b620f0e6b416c)
++++ b/app/src/main/java/com/papara/geminiapp/presentation/components/MessageItem.kt	(date 1716154327928)
+@@ -9,13 +9,12 @@
+ import androidx.compose.material3.Text
+ import androidx.compose.runtime.Composable
+ import androidx.compose.ui.Modifier
+-import androidx.compose.ui.tooling.preview.Preview
+ import androidx.compose.ui.unit.dp
+-import com.papara.geminiapp.presentation.chat_screen.Chat
++import com.papara.geminiapp.data.local.entity.ChatMessage
+ 
+ @Composable
+ fun MessageItem(
+-    message: Chat
++    message: ChatMessage
+ ) {
+     Row(
+         modifier = Modifier
+@@ -29,7 +28,7 @@
+             modifier = Modifier.padding(8.dp)
+         ) {
+             Text(
+-                text = message.prompt,
++                text = message.message,
+                 style = MaterialTheme.typography.bodyMedium,
+                 modifier = Modifier.padding(8.dp)
+             )
