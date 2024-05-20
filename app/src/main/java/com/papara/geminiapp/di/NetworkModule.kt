@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object AppModule {
+object NetworkModule {
 
     @Provides
     @Singleton
@@ -29,9 +29,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoinRepository(api: ApiService): ApiRepository {
+    fun provideApiRepository(api: ApiService): ApiRepository {
         return ApiRepositoryImpl(api)
     }
+
+
 
 
 

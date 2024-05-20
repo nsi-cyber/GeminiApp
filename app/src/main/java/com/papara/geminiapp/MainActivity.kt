@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.papara.geminiapp.presentation.chat_screen.ChatScreen
 import com.papara.geminiapp.presentation.chat_screen.ChatScreenViewModel
+import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreen
+import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreenViewModel
 import com.papara.geminiapp.ui.theme.GeminiAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: ChatScreenViewModel by viewModels()
+    private val chatViewModel: ChatScreenViewModel by viewModels()
+    private val databaseViewModel: ConversationListScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ChatScreen(viewModel = viewModel)
+                    ConversationListScreen(viewModel = databaseViewModel)
+                    //ChatScreen(viewModel = chatViewModel)
                 }
             }
         }

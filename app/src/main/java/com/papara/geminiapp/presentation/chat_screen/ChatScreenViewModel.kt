@@ -3,10 +3,12 @@ package com.papara.geminiapp.presentation.chat_screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.papara.geminiapp.common.Resource
+import com.papara.geminiapp.data.local.entity.ChatMessage
 import com.papara.geminiapp.data.remote.model.request.Content
 import com.papara.geminiapp.data.remote.model.request.MessageRequestBody
 import com.papara.geminiapp.data.remote.model.request.Part
 import com.papara.geminiapp.domain.useCase.chat.SendMessageUseCase
+import com.papara.geminiapp.domain.useCase.database.SavePromptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,12 +20,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatScreenViewModel @Inject constructor(
-    private val sendMessageUseCase: SendMessageUseCase
+    private val sendMessageUseCase: SendMessageUseCase,
+    private val savePromptUseCase: SavePromptUseCase
 ) : ViewModel() {
 
     private val _chatScreenState = MutableStateFlow(ChatScreenState())
     val chatScreenState = _chatScreenState.asStateFlow()
+init{
 
+}
     fun onEvent(event: ChatScreenEvent) {
         when (event) {
             is ChatScreenEvent.SendPrompt -> {
@@ -39,8 +44,9 @@ class ChatScreenViewModel @Inject constructor(
             }
         }
     }
+        private fun addPrompt(prompt: String?,isUser:Boolean) {
+        saveToDatabase( ChatMessage(conversationId = 1,message = prompt!!, isFromUser = isUser))
 
-    private fun addPrompt(prompt: String?,isUser:Boolean) {
         _chatScreenState.update {
             it.copy(
                 chatList = it.chatList.toMutableList().apply {
@@ -79,6 +85,13 @@ class ChatScreenViewModel @Inject constructor(
     }
 
 
+    private fun saveToDatabase(prompt: ChatMessage) {
+        viewModelScope.launch {
+            savePromptUseCase(prompt).onEach {message ->
+
+            }.launchIn(this)
+        }
+    }
 
 
 }

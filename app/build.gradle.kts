@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,12 +74,15 @@ dependencies {
     //Dependency Injection
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
+    kapt("androidx.room:room-compiler:2.6.1")
 
     //Network
     implementation(libs.retrofit2.retrofit)
     implementation(libs.retrofit2.gson)
     implementation(libs.okhttp3.okhttp)
     implementation(libs.okhttp3.logging)
+
+    annotationProcessor("android.arch.persistence.room:compiler:1.1.1")
 }
 
 kapt {
