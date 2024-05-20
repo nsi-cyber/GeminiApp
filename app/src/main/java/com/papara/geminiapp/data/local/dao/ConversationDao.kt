@@ -11,8 +11,8 @@ import com.papara.geminiapp.data.local.entity.Conversation
 interface ConversationDao {
 
     //@Query("SELECT * FROM chat_messages WHERE conversationId = :conversationId")
-    @Query("SELECT * FROM chat_messages ")
-    suspend fun getMessagesByConversationId(): List<ChatMessage>
+    @Query("SELECT * FROM chat_messages WHERE conversationId = :conversationId ")
+    suspend fun getMessagesByConversationId(conversationId: Long?): List<ChatMessage>
 
 
     @Query("SELECT * FROM conversations")
