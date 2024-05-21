@@ -41,7 +41,7 @@ class ConversationListScreenViewModel @Inject constructor(
 
             ConversationListScreenEvent.OnLoading -> {
                 _conversationListScreenState.update {
-                    it.copy(
+                    it.copy(conversationList = mutableListOf(),
                         isLoading = mutableStateOf(true)
                     )
                 }

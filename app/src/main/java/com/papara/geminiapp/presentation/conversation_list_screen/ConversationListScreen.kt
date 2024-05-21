@@ -7,11 +7,9 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissState
@@ -34,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
+
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,9 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -58,13 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.papara.geminiapp.R
-import com.papara.geminiapp.data.local.entity.ChatMessage
 import com.papara.geminiapp.data.local.entity.Conversation
-import com.papara.geminiapp.presentation.chat_screen.ChatScreenState
-import com.papara.geminiapp.presentation.components.DotsAnimation
 import com.papara.geminiapp.presentation.components.GeminiTopBar
-import com.papara.geminiapp.presentation.components.MessageItem
-import com.papara.geminiapp.ui.theme.DividerColor
 import com.papara.geminiapp.utils.observeLifecycleEvents
 import kotlinx.coroutines.delay
 
@@ -136,7 +126,7 @@ fun ConversationListScreen(
                     }
 
 
-                    items(conversationState.conversationList.size) { conversation ->
+                    items(conversationState.conversationList.size, key = {conversationState.conversationList.get(it).id}) { conversation ->
                         SwipeToDeleteContainer(
                             item = conversationState.conversationList[conversation],
                             onDelete = {
@@ -232,6 +222,7 @@ fun ConversationListItem(data: Conversation, onClick: (id: Long) -> Unit) {
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SwipeToDeleteContainer(
@@ -240,11 +231,7 @@ fun <T> SwipeToDeleteContainer(
     animationDuration: Int = 500,
     content: @Composable (T) -> Unit
 ) {
-
-    var isRemoved by remember {
-        mutableStateOf(false)
-    }
-
+    var isRemoved by remember { mutableStateOf(false) }
     val state = rememberDismissState(
         confirmValueChange = { value ->
             if (value == DismissValue.DismissedToStart) {
@@ -263,6 +250,13 @@ fun <T> SwipeToDeleteContainer(
         }
     }
 
+    AnimatedVisibility(
+        visible = !isRemoved,
+        exit = shrinkVertically(
+            animationSpec = tween(durationMillis = animationDuration),
+            shrinkTowards = Alignment.Top
+        ) + fadeOut()
+    ) {
         SwipeToDismiss(
             state = state,
             background = {
@@ -271,8 +265,10 @@ fun <T> SwipeToDeleteContainer(
             dismissContent = { content(item) },
             directions = setOf(DismissDirection.EndToStart)
         )
-
+    }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
