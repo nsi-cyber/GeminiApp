@@ -78,7 +78,10 @@ class ChatScreenViewModel @Inject constructor(
     }
 
     private fun getConversationMessages(conversationId: Long) {
+
         viewModelScope.launch {
+            _conversationId.longValue = conversationId
+
             getMessagesUseCase(conversationId = conversationId).onEach { messageList ->
                 _chatScreenState.update {
                     it.copy(chatList = messageList.toMutableList())

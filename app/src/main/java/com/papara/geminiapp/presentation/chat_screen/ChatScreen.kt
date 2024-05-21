@@ -80,14 +80,14 @@ fun ChatScreen(
             items(messages.chatList.size) { message ->
                 MessageItem(
                     messages.chatList[message],
-                    if (messages.isTyping && message == messages.chatList.size - 1) true else false,
+                    messages.isTyping && message == messages.chatList.size - 1,
                     scroll = {
                         coroutineScope.launch {
                             chatListState.animateScrollToItem(messages.chatList.size)
                         }
                     },
                     onTypeFinished = {
-                        viewModel.onEvent(ChatScreenEvent.TypingFinished)
+                         viewModel.onEvent(ChatScreenEvent.TypingFinished)
                     })
             }
 
