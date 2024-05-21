@@ -31,10 +31,6 @@ class MainActivity : ComponentActivity() {
             GeminiAppTheme {
                 NavigationGraph()
 
-                // A surface container using the 'background' color from the theme
-
-                  //  ConversationListScreen(viewModel = databaseViewModel)
-                    //ChatScreen(viewModel = chatViewModel)
 
             }
         }

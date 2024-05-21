@@ -11,5 +11,5 @@ interface ChatRepository  {
     suspend fun createConversation( conversation: Conversation):Long
     suspend fun getAllConversations():List<Conversation>
 
-    suspend fun clearConversation(conversationId: String)
+    suspend fun deleteConversation(conversation: Conversation)
 }

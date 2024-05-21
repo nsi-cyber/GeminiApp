@@ -1,42 +1,60 @@
 package com.papara.geminiapp.presentation.components
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlin.random.Random
+
 
 @Composable
-fun TypeWriterText(
+fun TypewriterTextEffect(
     text: String,
+    minDelayInMillis: Long = 10,
+    maxDelayInMillis: Long = 50,
+    minCharacterChunk: Int = 1,
+    maxCharacterChunk: Int = 5,
+    onEffectCompleted: () -> Unit = {},
+    displayTextComposable: @Composable (displayedText: String) -> Unit
 ) {
-
-    var textToDisplay by remember {
-        mutableStateOf("")
+    // Ensure minDelayInMillis is less than or equal to maxDelayInMillis
+    require(minDelayInMillis <= maxDelayInMillis) {
+        "TypewriterTextEffect: Invalid delay range. minDelayInMillis ($minDelayInMillis) must be less than or equal to maxDelayInMillis ($maxDelayInMillis)."
     }
 
-    LaunchedEffect(
-        key1 = text,
-    ) {
-
-            text.forEachIndexed { charIndex, _ ->
-                textToDisplay = text
-                    .substring(
-                        startIndex = 0,
-                        endIndex = charIndex + 1,
-                    )
-                delay(50)
-            }
+    // Ensure minCharacterChunk is less than or equal to maxCharacterChunk
+    require(minCharacterChunk <= maxCharacterChunk) {
+        "TypewriterTextEffect: Invalid character chunk range. minCharacterChunk ($minCharacterChunk) must be less than or equal to maxCharacterChunk ($maxCharacterChunk)."
     }
 
-    Text(
-        text = textToDisplay,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
-    )
+    // Initialize and remember the displayedText
+    var displayedText by remember { mutableStateOf("") }
+
+    // Call the displayTextComposable with the current displayedText value
+    displayTextComposable(displayedText)
+
+    // Launch the effect to update the displayedText value over time
+    LaunchedEffect(text) {
+        val textLength = text.length
+        var endIndex = 0
+
+        while (endIndex < textLength) {
+            endIndex = minOf(
+                endIndex + Random.nextInt(minCharacterChunk, maxCharacterChunk + 1),
+                textLength
+            )
+            displayedText = text.substring(startIndex = 0, endIndex = endIndex)
+            delay(Random.nextLong(minDelayInMillis, maxDelayInMillis))
+        }
+        onEffectCompleted()
+    }
 }

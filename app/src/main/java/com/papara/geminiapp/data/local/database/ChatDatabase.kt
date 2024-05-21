@@ -7,7 +7,6 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.papara.geminiapp.data.local.dao.ChatMessageDao
 import com.papara.geminiapp.data.local.dao.ConversationDao
 import com.papara.geminiapp.data.local.entity.ChatMessage
 import com.papara.geminiapp.data.local.entity.Conversation
@@ -15,7 +14,6 @@ import com.papara.geminiapp.data.local.entity.Conversation
 @Database(entities = [ChatMessage::class,Conversation::class], version = 1)
 @TypeConverters(ChatMessageListConverter::class)
 abstract class ChatDatabase : RoomDatabase() {
-    abstract fun chatMessageDao(): ChatMessageDao
     abstract fun conversationDao(): ConversationDao
 
 }

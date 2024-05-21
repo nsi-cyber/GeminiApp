@@ -20,6 +20,8 @@ import com.papara.geminiapp.domain.useCase.database.SavePromptUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -66,6 +68,12 @@ class ChatScreenViewModel @Inject constructor(
                 getConversationMessages(event.conversationId)
             }
 
+            ChatScreenEvent.TypingFinished ->    _chatScreenState.update {
+                it.copy(isTyping = false)
+            }
+            ChatScreenEvent.TypingStarted -> _chatScreenState.update {
+                it.copy(isTyping = true)
+            }
         }
     }
 
@@ -90,7 +98,7 @@ class ChatScreenViewModel @Inject constructor(
         )
 
         _chatScreenState.update {
-            it.copy(isLoading = false,
+            it.copy(isLoading = false, isTyping = true,
                 chatList = it.chatList.toMutableList().apply {
                     add(
                         ChatMessage(
@@ -149,10 +157,35 @@ class ChatScreenViewModel @Inject constructor(
 
     private fun createConversation(prompt: String) {
         viewModelScope.launch {
-            createConversationUseCase(prompt).onEach { conversationId ->
-                _conversationId.longValue = conversationId
-            }.launchIn(this)
-            addPrompt(prompt, isUser = true)
+            // Yeni konuşmayı oluştur ve ID'sini al
+            val conversationId = createConversationUseCase(prompt).first()
+            _conversationId.longValue = conversationId
+
+            // Mesajı veritabanına kaydet
+            savePromptUseCase(
+                ChatMessage(
+                    conversationId = _conversationId.longValue,
+                    message = prompt,
+                    isFromUser = true
+                )
+            ).collect() // collect ile akışı tamamla
+
+            // Ekran durumunu güncelle
+            _chatScreenState.update {
+                it.copy(
+                    isLoading = false,
+                    chatList = it.chatList.toMutableList().apply {
+                        add(
+                            ChatMessage(
+                                conversationId = _conversationId.longValue,
+                                message = prompt,
+                                isFromUser = true
+                            )
+                        )
+                    },
+                    prompt = ""
+                )
+            }
         }
     }
 

@@ -9,6 +9,6 @@ import com.papara.geminiapp.data.models.ConversationModel
 
 data class ConversationListScreenState(
     val conversationList: MutableList<Conversation> = mutableListOf(),
-    val isLoading: MutableState<Boolean> = mutableStateOf(false),
+    val isLoading: MutableState<Boolean> = mutableStateOf(true),
 )
 

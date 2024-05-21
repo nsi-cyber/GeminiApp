@@ -1,5 +1,7 @@
 package com.papara.geminiapp.presentation.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -20,7 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun NavigationGraph(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.background(MaterialTheme.colorScheme.primary),
     navController: NavHostController = rememberNavController(),
   //  coroutineScope: CoroutineScope = rememberCoroutineScope(),
     startDestination: String = Destination.SPLASH,

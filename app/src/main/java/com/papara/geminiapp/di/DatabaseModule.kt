@@ -2,13 +2,9 @@ package com.papara.geminiapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.papara.geminiapp.data.local.dao.ChatMessageDao
 import com.papara.geminiapp.data.local.dao.ConversationDao
 import com.papara.geminiapp.data.local.database.ChatDatabase
-import com.papara.geminiapp.data.remote.ApiService
-import com.papara.geminiapp.data.repository.ApiRepositoryImpl
 import com.papara.geminiapp.data.repository.ChatRepositoryImpl
-import com.papara.geminiapp.domain.repository.ApiRepository
 import com.papara.geminiapp.domain.repository.ChatRepository
 import dagger.Module
 import dagger.Provides
@@ -30,10 +26,7 @@ object DatabaseModule {
         ).build()
     }
 
-    @Provides
-    fun provideChatMessageDao(chatDatabase: ChatDatabase): ChatMessageDao {
-        return chatDatabase.chatMessageDao()
-    }
+
 
     @Provides
     fun provideConversationDao(chatDatabase: ChatDatabase): ConversationDao {
@@ -44,10 +37,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideChatRepository(
-        chatDao: ChatMessageDao,
         conversationDao: ConversationDao
     ): ChatRepository {
-        return ChatRepositoryImpl(chatMessageDao = chatDao, conversationDao = conversationDao)
+        return ChatRepositoryImpl( conversationDao = conversationDao)
     }
 
 }
