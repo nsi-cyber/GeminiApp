@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import com.papara.geminiapp.R
 
 @Composable
-fun ChatInput(
+fun ChatInput(textInput:String,
     modifier: Modifier = Modifier,
-    onSendMessage: (String) -> Unit
+    onSendMessage: (String) -> Unit,
+              onMessageChanged: (String) -> Unit
 ) {
-    var message by remember { mutableStateOf("") }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -53,8 +53,8 @@ fun ChatInput(
             focusedTextColor = MaterialTheme.colorScheme.outline,
             unfocusedTextColor = MaterialTheme.colorScheme.outline
         ),
-            value = message,
-            onValueChange = { message = it },
+            value = textInput,
+            onValueChange = { onMessageChanged(it) },
             modifier = Modifier
                 .weight(1f)
                 .clip(RoundedCornerShape(25.dp))
@@ -66,7 +66,7 @@ fun ChatInput(
             .clip(RoundedCornerShape(99.dp))
             .background(MaterialTheme.colorScheme.scrim)
 
-            .clickable { onSendMessage(message) }) {
+            .clickable { onSendMessage(textInput) }) {
             Icon(
                 modifier = Modifier
                     .size(48.dp)

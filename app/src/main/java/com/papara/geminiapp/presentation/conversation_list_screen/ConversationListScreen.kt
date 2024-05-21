@@ -263,7 +263,6 @@ fun <T> SwipeToDeleteContainer(
         }
     }
 
-
         SwipeToDismiss(
             state = state,
             background = {

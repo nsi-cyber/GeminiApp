@@ -118,6 +118,8 @@ fun ChatScreen(
         ChatInput(
             modifier = Modifier,
             onSendMessage = { prompt -> viewModel.onEvent(ChatScreenEvent.SendPrompt(prompt = prompt)) }
+            , onMessageChanged = {viewModel.onEvent(ChatScreenEvent.UpdatePrompt(it))},
+            textInput = messages.prompt
         )
     }
 
