@@ -174,7 +174,7 @@ class ChatScreenViewModel @Inject constructor(
 
             _chatScreenState.update {
                 it.copy(
-                    isLoading = false, isTyping = false,
+                    isLoading = true, isTyping = false,
                     chatList = it.chatList.toMutableList().apply {
                         add(
                             ChatMessage(

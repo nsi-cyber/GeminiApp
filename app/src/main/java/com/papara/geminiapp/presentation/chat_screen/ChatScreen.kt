@@ -88,7 +88,8 @@ fun ChatScreen(
                     },
                     onTypeFinished = {
                          viewModel.onEvent(ChatScreenEvent.TypingFinished)
-                    })
+                    }
+                )
             }
 
             item {
