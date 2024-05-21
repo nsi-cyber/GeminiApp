@@ -5,4 +5,5 @@
     <string name="empty_conversation_error">You don\'t have any conversation</string>
     <string name="text_field_placeholder">Enter your message…</string>
     <string name="splash_text">Welcome To New Ai…</string>
+    <string name="error_message">I cannot provide a response for this</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.papara.geminiapp.presentation.chat_screen
 
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,20 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.papara.geminiapp.R
 import com.papara.geminiapp.data.local.entity.ChatMessage
-import com.papara.geminiapp.data.local.entity.Conversation
 import com.papara.geminiapp.presentation.components.ChatInput
 import com.papara.geminiapp.presentation.components.DotsAnimation
 import com.papara.geminiapp.presentation.components.MessageItem
-import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreenViewModel
 import com.papara.geminiapp.utils.rememberKeyboardVisibility
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -45,6 +36,7 @@ fun ChatScreen(
     val chatListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val isKeyboardVisible by rememberKeyboardVisibility()
+
     val messages by viewModel.chatScreenState.collectAsState(
         initial = ChatScreenState(
             isTyping = false,

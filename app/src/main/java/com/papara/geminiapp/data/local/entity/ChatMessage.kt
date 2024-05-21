@@ -9,5 +9,6 @@ data class ChatMessage(
     val conversationId: Long,
     val message: String,
     val isFromUser: Boolean,
+    val isError: Boolean,
     val timestamp: Long=System.currentTimeMillis()
 )

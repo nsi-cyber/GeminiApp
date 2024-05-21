@@ -1,11 +1,6 @@
 package com.papara.geminiapp.presentation.chat_screen
 
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.papara.geminiapp.common.ApiKeyProvider
@@ -69,9 +64,10 @@ class ChatScreenViewModel @Inject constructor(
                 getConversationMessages(event.conversationId)
             }
 
-            ChatScreenEvent.TypingFinished ->    _chatScreenState.update {
+            ChatScreenEvent.TypingFinished -> _chatScreenState.update {
                 it.copy(isTyping = false)
             }
+
             ChatScreenEvent.TypingStarted -> _chatScreenState.update {
                 it.copy(isTyping = true)
             }
@@ -91,24 +87,25 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
-    private fun addPrompt(prompt: String?, isUser: Boolean) {
+    private fun addPrompt(prompt: String?, isUser: Boolean, isError: Boolean=false) {
 
         saveToDatabase(
             ChatMessage(
                 conversationId = _conversationId.longValue,
                 message = prompt!!,
-                isFromUser = isUser
+                isFromUser = isUser, isError = isError
             )
         )
 
         _chatScreenState.update {
-            it.copy(isLoading = false, isTyping = true,
+            it.copy(
+                isLoading = false, isTyping = true,
                 chatList = it.chatList.toMutableList().apply {
                     add(
                         ChatMessage(
                             conversationId = _conversationId.longValue,
                             message = prompt,
-                            isFromUser = isUser
+                            isFromUser = isUser, isError = isError
                         )
                     )
                 },
@@ -134,14 +131,20 @@ class ChatScreenViewModel @Inject constructor(
                 when (message) {
 
 
-                    is Resource.Error -> {}
+                    is Resource.Error -> {
+                        addPrompt(
+                            isError = true, isUser = false, prompt = message.message
+                        )
+                    }
+
                     is Resource.Loading -> {
                         _chatScreenState.update {
                             it.copy(
-                              isLoading = true
+                                isLoading = true
                             )
                         }
                     }
+
                     is Resource.Empty -> {}
                     is Resource.Success -> {
                         addPrompt(
@@ -170,7 +173,8 @@ class ChatScreenViewModel @Inject constructor(
                 ChatMessage(
                     conversationId = _conversationId.longValue,
                     message = prompt,
-                    isFromUser = true
+                    isFromUser = true,
+                    isError = false
                 )
             ).collect()
 
@@ -182,7 +186,8 @@ class ChatScreenViewModel @Inject constructor(
                             ChatMessage(
                                 conversationId = _conversationId.longValue,
                                 message = prompt,
-                                isFromUser = true
+                                isFromUser = true,
+                                isError = false
                             )
                         )
                     },
@@ -191,7 +196,6 @@ class ChatScreenViewModel @Inject constructor(
             }
         }
     }
-
 
 
 }

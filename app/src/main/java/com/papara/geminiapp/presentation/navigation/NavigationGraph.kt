@@ -3,21 +3,17 @@ package com.papara.geminiapp.presentation.navigation
 import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.papara.geminiapp.presentation.chat_screen.ChatScreen
 import com.papara.geminiapp.presentation.conversation_list_screen.ConversationListScreen
 import com.papara.geminiapp.presentation.splash_screen.SplashScreen
-import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
