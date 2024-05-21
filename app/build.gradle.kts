@@ -9,7 +9,9 @@ plugins {
 }
 
 android {
-    namespace = "com.papara.geminiapp"
+    ndkVersion ="27.0.11718014"
+
+            namespace = "com.papara.geminiapp"
     compileSdk = 34
 
     defaultConfig {

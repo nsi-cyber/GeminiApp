@@ -6,6 +6,6 @@ add_library(
 
         SHARED
 
-        libnative-lib.cpp
+        libnative_lib.cpp
 
 )

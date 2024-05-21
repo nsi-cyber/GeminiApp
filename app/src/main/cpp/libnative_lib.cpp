@@ -12,7 +12,7 @@ std::string getData() {
 }
 
 extern "C" jstring
-Java_com_papara_gemini_common_ApiKeyProvider_getApiKey(
+Java_com_papara_geminiapp_common_ApiKeyProvider_getApiKey(
         JNIEnv *env,
         jobject /* this */,
         jint id) {
