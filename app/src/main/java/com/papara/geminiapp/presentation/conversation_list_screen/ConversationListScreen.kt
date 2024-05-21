@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -107,7 +108,7 @@ fun ConversationListScreen(
                     item {
                         Column (modifier = Modifier.padding(16.dp)){
                             Text(
-                                text = "Last",
+                                text = stringResource(id = R.string.last),
                                 color = MaterialTheme.colorScheme.outline,
                                 fontSize = 22.sp,
                                 textAlign = TextAlign.Start,
@@ -115,7 +116,7 @@ fun ConversationListScreen(
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Text(
-                                text = "Conversations",
+                                text = stringResource(id = R.string.conversations),
                                 color = MaterialTheme.colorScheme.outline,
                                 fontSize = 28.sp,
                                 textAlign = TextAlign.Start,
@@ -144,7 +145,9 @@ fun ConversationListScreen(
                         }
                         if (conversation < conversationState.conversationList.size-1)
                             Box(
-                                modifier = Modifier.fillMaxWidth().padding(start = 42.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 42.dp)
                                     .height(1.dp)
                                     .background(MaterialTheme.colorScheme.primary)
 
@@ -171,7 +174,8 @@ fun FloatingButton(onClick: () -> Unit) {
         Image(
             painter = painterResource(id = R.drawable.ic_plus),
             contentDescription = "New Chat Logo",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
                 .size(24.dp),
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
@@ -195,7 +199,9 @@ fun EmptyListView() {
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
         )
-        Text(text = "You dont have any conversation")
+        Text(
+
+            text =stringResource(id = R.string.empty_conversation_error) )
     }
 }
 
@@ -203,7 +209,8 @@ fun EmptyListView() {
 fun ConversationListItem(data: Conversation, onClick: (id: Long) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()
             .clickable { onClick(data.id) }
             .padding(14.dp),

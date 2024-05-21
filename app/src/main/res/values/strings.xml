@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GeminiApp</string>
+    <string name="last">Last</string>
+    <string name="conversations">Conversations</string>
+    <string name="empty_conversation_error">You don\'t have any conversation</string>
+    <string name="text_field_placeholder">Enter your message…</string>
+    <string name="splash_text">Welcome To New Ai…</string>
 </resources>

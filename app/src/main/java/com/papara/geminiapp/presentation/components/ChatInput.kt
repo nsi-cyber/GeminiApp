@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.papara.geminiapp.R
@@ -59,7 +60,7 @@ fun ChatInput(textInput:String,
                 .weight(1f)
                 .clip(RoundedCornerShape(25.dp))
                 ,
-            placeholder = { Text("Enter your message...") }
+            placeholder = { Text(stringResource(id = R.string.text_field_placeholder)) }
         )
 
         Box(modifier = Modifier

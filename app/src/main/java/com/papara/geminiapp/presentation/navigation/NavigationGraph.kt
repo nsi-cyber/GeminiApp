@@ -24,15 +24,11 @@ import kotlinx.coroutines.CoroutineScope
 fun NavigationGraph(
     modifier: Modifier = Modifier.background(MaterialTheme.colorScheme.primary),
     navController: NavHostController = rememberNavController(),
-  //  coroutineScope: CoroutineScope = rememberCoroutineScope(),
     startDestination: String = Destination.SPLASH,
     navActions: NavigationActions = remember(navController) {
         NavigationActions(navController)
     }
 ) {
-
-    //val currentNavigationBackStackEntry by navController.currentBackStackEntryAsState()
-   // val currentRoute = currentNavigationBackStackEntry?.destination?.route ?: startDestination
 
     NavHost(
         navController = navController,
@@ -44,9 +40,7 @@ fun NavigationGraph(
         ) {
             SplashScreen(
                 onSplashFinished = {
-                   // navActions.navigateToConversationDetail()
-
-                    navActions.navigateToConversationList()
+                navActions.navigateToConversationList()
                 }
             )
         }

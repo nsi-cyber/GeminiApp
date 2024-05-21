@@ -22,33 +22,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val chatViewModel: ChatScreenViewModel by viewModels()
-    private val databaseViewModel: ConversationListScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GeminiAppTheme {
                 NavigationGraph()
-
-
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GeminiAppTheme {
-        Greeting("Android")
-    }
-}

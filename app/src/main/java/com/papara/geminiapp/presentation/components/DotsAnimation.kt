@@ -36,7 +36,7 @@ fun DotsAnimation(dotSize: Dp) {
             .size(dotSize)
             .offset(y = -offset.dp)
             .background(
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.outline,
                 shape = CircleShape
             )
     )
