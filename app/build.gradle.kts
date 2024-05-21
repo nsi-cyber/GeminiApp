@@ -1,3 +1,6 @@
+import org.gradle.util.GradleVersion.version
+import org.gradle.util.Path.path
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -27,6 +30,18 @@ android {
                 )
             }
         }
+
+        externalNativeBuild {
+            cmake {
+                path("src/main/cpp/CMakeLists.txt")
+                version ("3.18.1") // Will be replaced by your cmake version
+
+            }
+        }
+
+
+      
+
     }
 
     buildTypes {

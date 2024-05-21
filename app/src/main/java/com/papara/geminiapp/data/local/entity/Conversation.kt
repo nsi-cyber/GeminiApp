@@ -11,7 +11,6 @@ import com.papara.geminiapp.data.models.ConversationModel
 data class Conversation(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val description: String,
-
 )
 
 

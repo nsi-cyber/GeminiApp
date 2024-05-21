@@ -8,6 +8,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.papara.geminiapp.common.ApiKeyProvider
 import com.papara.geminiapp.common.Resource
 import com.papara.geminiapp.data.local.entity.ChatMessage
 import com.papara.geminiapp.data.remote.model.request.Content
@@ -119,7 +120,7 @@ class ChatScreenViewModel @Inject constructor(
     private fun getResponse(prompt: String) {
         viewModelScope.launch {
             sendMessageUseCase(
-                apiKey = "AIzaSyCDOf1x4xf_0-_kT4np8Oyj-o1m0cGDUmA", body = MessageRequestBody(
+                apiKey = ApiKeyProvider.getApiKey(), body = MessageRequestBody(
                     contents = listOf(
                         Content(
                             parts = listOf(
