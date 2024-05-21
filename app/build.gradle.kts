@@ -9,9 +9,16 @@ plugins {
 }
 
 android {
-    ndkVersion ="27.0.11718014"
+    externalNativeBuild {
+        cmake {
+            path("cpp/CMakeLists.txt")
+            version ("3.22.1") // Will be replaced by your cmake version
 
-            namespace = "com.papara.geminiapp"
+        }
+    }
+
+    ndkVersion ="27.0.11718014"
+    namespace = "com.papara.geminiapp"
     compileSdk = 34
 
     defaultConfig {
@@ -33,13 +40,7 @@ android {
             }
         }
 
-        externalNativeBuild {
-            cmake {
-                path("src/main/cpp/CMakeLists.txt")
-                version ("3.18.1") // Will be replaced by your cmake version
 
-            }
-        }
 
 
       

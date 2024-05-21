@@ -119,6 +119,7 @@ class ChatScreenViewModel @Inject constructor(
 
     private fun getResponse(prompt: String) {
         viewModelScope.launch {
+            println(ApiKeyProvider.getApiKey())
             sendMessageUseCase(
                 apiKey = ApiKeyProvider.getApiKey(), body = MessageRequestBody(
                     contents = listOf(
