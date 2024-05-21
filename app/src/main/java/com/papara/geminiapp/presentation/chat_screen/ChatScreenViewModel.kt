@@ -160,23 +160,21 @@ class ChatScreenViewModel @Inject constructor(
 
     private fun createConversation(prompt: String) {
         viewModelScope.launch {
-            // Yeni konuşmayı oluştur ve ID'sini al
+
             val conversationId = createConversationUseCase(prompt).first()
             _conversationId.longValue = conversationId
 
-            // Mesajı veritabanına kaydet
             savePromptUseCase(
                 ChatMessage(
                     conversationId = _conversationId.longValue,
                     message = prompt,
                     isFromUser = true
                 )
-            ).collect() // collect ile akışı tamamla
+            ).collect()
 
-            // Ekran durumunu güncelle
             _chatScreenState.update {
                 it.copy(
-                    isLoading = false,
+                    isLoading = false, isTyping = false,
                     chatList = it.chatList.toMutableList().apply {
                         add(
                             ChatMessage(

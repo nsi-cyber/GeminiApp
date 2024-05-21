@@ -261,14 +261,7 @@ fun <T> SwipeToDeleteContainer(
         }
     }
 
-    AnimatedVisibility(
-        modifier = Modifier,
-        visible = !isRemoved,
-        exit = shrinkVertically(
-            animationSpec = tween(durationMillis = animationDuration),
-            shrinkTowards = Alignment.Top
-        ) + fadeOut()
-    ) {
+
         SwipeToDismiss(
             state = state,
             background = {
@@ -277,7 +270,7 @@ fun <T> SwipeToDeleteContainer(
             dismissContent = { content(item) },
             directions = setOf(DismissDirection.EndToStart)
         )
-    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

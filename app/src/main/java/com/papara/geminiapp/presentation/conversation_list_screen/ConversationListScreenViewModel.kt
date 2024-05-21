@@ -65,6 +65,7 @@ class ConversationListScreenViewModel @Inject constructor(
     private fun deleteConversation(conversation: Conversation) {
         viewModelScope.launch {
             deleteConversationUseCase(conversation).collect()
+
             getConversationsUseCase().onEach {conversations ->
                 _conversationListScreenState.update {
                     it.copy(conversationList = conversations.toMutableList(),
