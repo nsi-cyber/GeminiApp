@@ -98,10 +98,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
-    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android.v2481)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler.v2481)
+    implementation(libs.androidx.hilt.navigation.compose.v100)
     //Dependency Injection
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
@@ -113,7 +113,7 @@ dependencies {
     implementation(libs.okhttp3.okhttp)
     implementation(libs.okhttp3.logging)
 
-    annotationProcessor("android.arch.persistence.room:compiler:1.1.1")
+    annotationProcessor(libs.compiler)
 }
 
 kapt {
